@@ -97,5 +97,15 @@ contract ERC20 is IERC20 {
 }
 
 contract Guess {
-   
+    address payable owner;
+    
+    constructor(address tokenAddress) {
+        owner = payable(msg.sender);
+    }
+    
+    function close() public payable {
+        require(msg.sender == owner, "Only owner can call this function.");
+
+        selfdestruct(payable(owner));
+    }
 }
