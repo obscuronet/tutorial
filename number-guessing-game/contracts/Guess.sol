@@ -1,6 +1,24 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
+contract Guess {
+    address payable owner;
+    
+    constructor(address tokenAddress) {
+        owner = payable(msg.sender);
+    }
+    
+    function close() public payable {
+        require(msg.sender == owner, "Only owner can call this function.");
+
+        selfdestruct(payable(owner));
+    }
+}
+
+
+
+
+
 interface IERC20 {
     function totalSupply() external view returns (uint256);
 
@@ -93,19 +111,5 @@ contract ERC20 is IERC20 {
         balances[_contractOwner] = balances[_contractOwner] - numTokens;
         balances[receiver] = balances[receiver] + numTokens;
         return true;
-    }
-}
-
-contract Guess {
-    address payable owner;
-    
-    constructor(address tokenAddress) {
-        owner = payable(msg.sender);
-    }
-    
-    function close() public payable {
-        require(msg.sender == owner, "Only owner can call this function.");
-
-        selfdestruct(payable(owner));
     }
 }
